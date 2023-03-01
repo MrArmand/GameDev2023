@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    [SerializeField] private float xSpeed;
+    [SerializeField] private float rotationSpeed;
     [SerializeField] private float ySpeed;
 
     private Rigidbody2D rb2D;
@@ -24,12 +24,12 @@ public class PlayerMovementController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
-            velocity.x = xSpeed;
+            transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.A)) 
         {
-            velocity.x = -1f* xSpeed;
+            transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.W))
