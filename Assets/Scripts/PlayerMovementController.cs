@@ -31,17 +31,7 @@ public class PlayerMovementController : MonoBehaviour
             transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
         }
 
-        // Check for ground contact
-        float spriteHeight = spriteRenderer.bounds.size.y;
-        Vector2 checkPos = transform.position - Vector3.up * (spriteHeight / 2);
-        RaycastHit2D hit = Physics2D.Raycast(checkPos, -Vector2.up, groundCheckDistance, groundLayer);
-        isGrounded = hit.collider != null;
-
-        // Freeze game if player touches ground
-        if (isGrounded)
-        {
-            Time.timeScale = 0f;
-        }
+        
     }
 
     private void FixedUpdate()
@@ -52,6 +42,11 @@ public class PlayerMovementController : MonoBehaviour
             Vector2 thrustVector = transform.up;
             rb.AddForce(thrust * thrustVector * Time.fixedDeltaTime);
         }
+    }
+
+    public void onGroundChange(GameObject _onGround)
+    {
+        Debug.Log("Hit the road Jack");
     }
 }
 
