@@ -17,6 +17,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
+    private int multiplier = 1;
     public LayerMask groundLayer;
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
@@ -55,33 +56,39 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
-
+    public void MultiplierChange(int newMultiplier)
+    {
+        Debug.Log(newMultiplier);
+        multiplier = newMultiplier;
+    }
 
     public void onGroundChange(GameObject _onGround)
     {
-        totalScore += groundScore;
+        totalScore += (groundScore * multiplier);
 
         Debug.Log("Hit the road Jack");
 
         StartCoroutine(Freeze());
+        Time.timeScale = 0;
         // Freeze a game for 3 seconds 
         // If it has a fuel,it return the lander to start position
         // Otherwise it's the end of game
-        IEnumerator Freeze()
+        
+    }
+    IEnumerator Freeze()
+    {
+        scoreText.text = "SCORE: " + totalScore.ToString();
+        yield return new WaitForSecondsRealtime(3f);
+        Time.timeScale = 1;
+        if (fuel > 0)
         {
-            scoreText.text = "SCORE: " + totalScore.ToString();
-            yield return new WaitForSecondsRealtime(3f);
-            Time.timeScale = 1;
-            if (fuel > 0)
-            {
-                rb2D.position = new Vector3(0, 0, 0); // starting position
-                rb2D.velocity = new Vector2(0, 0);    // reset a speed
-                rb2D.rotation = 0;                    // reset a rotation
-            }
-            else
-            {
-                Debug.Log("NO FUEL - END OF THE GAME");
-            }
+            rb2D.position = new Vector3(0, 0, 0); // starting position
+            rb2D.velocity = new Vector2(0, 0);    // reset a speed
+            rb2D.rotation = 0;                    // reset a rotation
+        }
+        else
+        {
+            Debug.Log("NO FUEL - END OF THE GAME");
         }
     }
 }

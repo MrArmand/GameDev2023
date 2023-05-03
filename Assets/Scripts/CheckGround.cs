@@ -9,6 +9,9 @@ public class CheckGround : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        OnTriggerChange?.Invoke(other.gameObject);
+        if (other.gameObject.tag == "Ground")
+        {
+            OnTriggerChange?.Invoke(other.gameObject);
+        }
     }
 }
