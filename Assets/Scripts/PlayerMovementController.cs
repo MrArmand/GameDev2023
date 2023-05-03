@@ -12,18 +12,22 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float thrust;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Text fuelText;
-    [SerializeField] private int fuel = 1000;
-    [SerializeField] private float comsumption = 50;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private float fuel;
+    [SerializeField] private float comsumption;
+    [SerializeField] private int totalScore;
+    [SerializeField] private int groundScore;
     public LayerMask groundLayer;
-    private Rigidbody2D rb;
+    private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
     private bool isGrounded;
     
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         fuelText.text += fuel.ToString();
+        scoreText.text += totalScore.ToString();
     }
 
     private void Update()
@@ -37,7 +41,7 @@ public class PlayerMovementController : MonoBehaviour
             transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
         }
 
-        
+        fuelText.text = "FUEL: " + ((int)fuel).ToString();
     }
 
     private void FixedUpdate()
@@ -46,16 +50,39 @@ public class PlayerMovementController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             Vector2 thrustVector = transform.up;
-            rb.AddForce(thrust * thrustVector * Time.fixedDeltaTime);
-            fuel -= (int) (comsumption * Time.fixedDeltaTime);
-            
+            rb2D.AddForce(thrust * thrustVector * Time.fixedDeltaTime);
+            fuel -= (comsumption * Time.fixedDeltaTime);   
         }
-        fuelText.text += fuel.ToString();
     }
+
+
 
     public void onGroundChange(GameObject _onGround)
     {
+        totalScore += groundScore;
+
         Debug.Log("Hit the road Jack");
+
+        StartCoroutine(Freeze());
+        // Freeze a game for 3 seconds 
+        // If it has a fuel,it return the lander to start position
+        // Otherwise it's the end of game
+        IEnumerator Freeze()
+        {
+            scoreText.text = "SCORE: " + totalScore.ToString();
+            yield return new WaitForSecondsRealtime(3f);
+            Time.timeScale = 1;
+            if (fuel > 0)
+            {
+                rb2D.position = new Vector3(0, 0, 0); // starting position
+                rb2D.velocity = new Vector2(0, 0);    // reset a speed
+                rb2D.rotation = 0;                    // reset a rotation
+            }
+            else
+            {
+                Debug.Log("NO FUEL - END OF THE GAME");
+            }
+        }
     }
 }
 
