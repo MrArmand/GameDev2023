@@ -82,7 +82,7 @@ public class PlayerMovementController : MonoBehaviour
         Time.timeScale = 1;
         if (fuel > 0)
         {
-            rb2D.position = new Vector3(0, 0, 0); // starting position
+            rb2D.position = new Vector3(0, 1, 0); // starting position
             rb2D.velocity = new Vector2(0, 0);    // reset a speed
             rb2D.rotation = 0;                    // reset a rotation
         }
