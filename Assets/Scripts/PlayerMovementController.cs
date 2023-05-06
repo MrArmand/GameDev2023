@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class PlayerMovementController : MonoBehaviour
 {
-
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float thrust;
     [SerializeField] private float groundCheckDistance;
@@ -17,6 +16,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
+    public SpriteRenderer thrusterSprite;
     private int multiplier = 1;
     public LayerMask groundLayer;
     private Rigidbody2D rb2D;
@@ -50,11 +50,17 @@ public class PlayerMovementController : MonoBehaviour
         // Apply thrust
         if (Input.GetKey(KeyCode.W))
         {
+            thrusterSprite.enabled = true;
             Vector2 thrustVector = transform.up;
             rb2D.AddForce(thrust * thrustVector * Time.fixedDeltaTime);
             fuel -= (comsumption * Time.fixedDeltaTime);   
         }
+        else
+        {
+            thrusterSprite.enabled = false;
+        }
     }
+
 
     public void MultiplierChange(int newMultiplier)
     {
