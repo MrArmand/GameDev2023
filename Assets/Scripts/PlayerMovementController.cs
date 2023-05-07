@@ -7,24 +7,22 @@ using UnityEngine.UI;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    [SerializeField] private float rotationSpeed;
-    [SerializeField] private float thrust;
-    [SerializeField] private float groundCheckDistance;
     [SerializeField] private Text fuelText;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text highestScoreText;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float thrust;
+    [SerializeField] private float groundCheckDistance;
     [SerializeField] private float fuel;
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
     public SpriteRenderer thrusterSprite;
-    private int multiplier = 1;
     public LayerMask groundLayer;
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
-    private bool isGrounded;
+    private int multiplier = 1;
     private int currentHighScore;
-
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -87,6 +85,8 @@ public class PlayerMovementController : MonoBehaviour
             highestScoreText.text = totalScore.ToString();
         }
 
+        
+
         Debug.Log("Hit the road Jack");
 
         StartCoroutine(Freeze());
@@ -103,7 +103,7 @@ public class PlayerMovementController : MonoBehaviour
         Time.timeScale = 1;
         if (fuel > 0)
         {
-            rb2D.position = new Vector3(0, 1, 0); // starting position
+            rb2D.position = new Vector2(0, 1); // starting position
             rb2D.velocity = new Vector2(0, 0);    // reset a speed
             rb2D.rotation = 0;                    // reset a rotation
         }
