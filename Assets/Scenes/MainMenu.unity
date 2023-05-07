@@ -1582,7 +1582,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropdown: {fileID: 824796030}
   output: {fileID: 1677352358}
-  chosenProfile: 0
 --- !u!1 &982668807
 GameObject:
   m_ObjectHideFlags: 0
