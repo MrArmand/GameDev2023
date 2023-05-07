@@ -2,28 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Profiles : MonoBehaviour
 {
-    public TextMeshProUGUI output;
+    public TMP_Dropdown dropdown;
 
-    public void HandleInputData(int val)
+    public void Start()
     {
-        if (val == 0)
-        {
-            output.text = "0";
-        }
+        int chosenProfile = PlayerPrefs.GetInt("ChosenProfile");
+        dropdown.value = chosenProfile;
+    }
 
-
-        if (val == 1)
-        {
-            output.text = "1000";
-        }
-
-
-        if (val == 2)
-        {
-            output.text = "Amogus";
-        }
+    public void HandleInputData(int chosenProfile)
+    {
+        Debug.Log("Chosen profile: " + chosenProfile);
+        PlayerPrefs.SetInt("ChosenProfile", chosenProfile);
+        SaveGame.ProfileID = chosenProfile;
+        Debug.Log("Current profile: " + PlayerPrefs.GetInt("ChosenProfile"));
     }
 }
