@@ -11,16 +11,20 @@ public class Profiles : MonoBehaviour
 
     public void Start()
     {
-        int chosenProfile = PlayerPrefs.GetInt("ChosenProfile");
-        dropdown.value = chosenProfile;
+        SaveGame.ProfileID = 0;
+        SaveGame.LoadProgress();
+        int score = SaveGame.Score;
+        Debug.Log("Score: " + score);
+        output.text = score.ToString();
     }
 
     public void HandleInputData(int chosenProfile)
     {
-        Debug.Log("Chosen profile: " + chosenProfile);
-        PlayerPrefs.SetInt("ChosenProfile", chosenProfile);
+        Debug.Log(chosenProfile);
         SaveGame.ProfileID = chosenProfile;
+        SaveGame.LoadProgress();
         int score = SaveGame.Score;
+        Debug.Log("Score: " + score);
         output.text = score.ToString();
     }
 }
