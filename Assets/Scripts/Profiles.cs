@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Profiles : MonoBehaviour
 {
     public TMP_Dropdown dropdown;
+    public TextMeshProUGUI output;
 
     public void Start()
     {
@@ -20,5 +21,7 @@ public class Profiles : MonoBehaviour
         PlayerPrefs.SetInt("ChosenProfile", chosenProfile);
         SaveGame.ProfileID = chosenProfile;
         Debug.Log("Current profile: " + PlayerPrefs.GetInt("ChosenProfile"));
+        int score = SaveGame.Score;
+        output.text = score.ToString();
     }
 }
