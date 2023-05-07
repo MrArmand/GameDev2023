@@ -17,12 +17,14 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
+    [SerializeField] private float maxDistanceFromStart = 15f;
     public SpriteRenderer thrusterSprite;
     public LayerMask groundLayer;
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
     private int multiplier = 1;
     private int currentHighScore;
+    private Vector3 startPosition;
     private Vector3 lastPosition;
     private Quaternion lastRotation;
     private float lastFuel;
@@ -38,6 +40,7 @@ public class PlayerMovementController : MonoBehaviour
         highestScoreText.text = currentHighScore.ToString();
         lastPosition = transform.position;
         lastRotation = transform.rotation;
+        startPosition = transform.position;
         lastFuel = fuel;
     }
 
@@ -57,6 +60,13 @@ public class PlayerMovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float distanceFromStart = Vector3.Distance(startPosition, transform.position);
+        Debug.Log(distanceFromStart);
+        if (distanceFromStart >= maxDistanceFromStart)
+        {
+            rb2D.position = new Vector2(0, 1);
+        }
+
         // Apply thrust
         if (Input.GetKey(KeyCode.W))
         {
