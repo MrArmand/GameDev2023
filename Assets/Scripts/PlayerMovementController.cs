@@ -12,6 +12,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Text fuelText;
     [SerializeField] private Text scoreText;
+    [SerializeField] private Text highestScoreText;
     [SerializeField] private float fuel;
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
@@ -33,6 +34,7 @@ public class PlayerMovementController : MonoBehaviour
         // Get the current high score for the player
         SaveGame.LoadProgress();
         currentHighScore = SaveGame.Score;
+        highestScoreText.text = currentHighScore.ToString();
     }
 
     private void Update()
@@ -82,6 +84,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             SaveGame.Score = totalScore;
             SaveGame.SaveProgress();
+            highestScoreText.text = totalScore.ToString();
         }
 
         Debug.Log("Hit the road Jack");
