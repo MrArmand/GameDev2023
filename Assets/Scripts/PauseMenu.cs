@@ -7,6 +7,13 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenuUI;
     public static bool gameIsPaused = false;
+    private PlayerMovementController player;
+
+    private void Start()
+    {
+        player = FindObjectOfType<PlayerMovementController>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -37,9 +44,10 @@ public class PauseMenu : MonoBehaviour
         gameIsPaused = true;
     }
 
-    public void Save()
+    public void Rewind()
     {
-        Debug.Log("SAVING THE GAME.");
+        player.Rewind();
+        Debug.Log("REWINDING THE GAME.");
     }
 
     public void Menu()

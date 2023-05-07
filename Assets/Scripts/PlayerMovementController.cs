@@ -23,6 +23,9 @@ public class PlayerMovementController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private int multiplier = 1;
     private int currentHighScore;
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
+    private float lastFuel;
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -33,6 +36,9 @@ public class PlayerMovementController : MonoBehaviour
         SaveGame.LoadProgress();
         currentHighScore = SaveGame.Score;
         highestScoreText.text = currentHighScore.ToString();
+        lastPosition = transform.position;
+        lastRotation = transform.rotation;
+        lastFuel = fuel;
     }
 
     private void Update()
@@ -64,7 +70,13 @@ public class PlayerMovementController : MonoBehaviour
             thrusterSprite.enabled = false;
         }
     }
-
+    public void Rewind()
+    {
+        transform.position = lastPosition;
+        transform.rotation = lastRotation;
+        rb2D.velocity = Vector2.zero;
+        fuel = lastFuel;
+    }
 
     public void MultiplierChange(int newMultiplier)
     {
@@ -106,6 +118,7 @@ public class PlayerMovementController : MonoBehaviour
             rb2D.position = new Vector2(0, 1); // starting position
             rb2D.velocity = new Vector2(0, 0);    // reset a speed
             rb2D.rotation = 0;                    // reset a rotation
+            lastFuel = fuel;
         }
         else
         {
