@@ -16,7 +16,6 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float comsumption;
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
-    Dictionary<string, int> highScores = new Dictionary<string, int>();
     public SpriteRenderer thrusterSprite;
     private int multiplier = 1;
     public LayerMask groundLayer;
@@ -32,7 +31,8 @@ public class PlayerMovementController : MonoBehaviour
         fuelText.text += fuel.ToString();
         scoreText.text += totalScore.ToString();
         // Get the current high score for the player
-        int chosenProfile = PlayerPrefs.GetInt("ChosenProfile");
+        SaveGame.LoadProgress();
+        currentHighScore = SaveGame.Score;
     }
 
     private void Update()
@@ -80,6 +80,7 @@ public class PlayerMovementController : MonoBehaviour
 
         if (totalScore > currentHighScore)
         {
+            SaveGame.Score = totalScore;
             SaveGame.SaveProgress();
         }
 

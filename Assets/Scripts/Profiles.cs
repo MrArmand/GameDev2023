@@ -20,7 +20,6 @@ public class Profiles : MonoBehaviour
         Debug.Log("Chosen profile: " + chosenProfile);
         PlayerPrefs.SetInt("ChosenProfile", chosenProfile);
         SaveGame.ProfileID = chosenProfile;
-        Debug.Log("Current profile: " + PlayerPrefs.GetInt("ChosenProfile"));
         int score = SaveGame.Score;
         output.text = score.ToString();
     }
