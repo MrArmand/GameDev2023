@@ -3,42 +3,45 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    public Transform player; // Reference to the player object
-    public Vector3 offset;   // Offset between the camera and the player
+    public Transform player;
+    public Vector3 offset;
+    [SerializeField] private float zoomSpeed = 1f;
+    [SerializeField] private float minZoom = 1f;
+    [SerializeField] private float maxZoom = 3f;
+    [SerializeField] private float maxDistanceFromStart = 5f;
+    [SerializeField] private float smoothTime = 0.3f;
 
-    void Start()
+    private Camera cam;
+    private Vector3 startPosition;
+    private Vector3 velocity;
+
+    private void Start()
     {
-        // Set the offset to match the camera's position in the editor
-        GetComponent<Camera>().orthographicSize = 3; // Size u want to start with
+        cam = GetComponent<Camera>();
+        cam.orthographicSize = 2;
         offset = transform.position - player.position;
+        startPosition = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - scroll * zoomSpeed, minZoom, maxZoom);
+    }
 
-        if (Input.GetKey(KeyCode.Q)) // Also you can change E to anything
+   
+    private void FixedUpdate()
+    {
+        float distanceFromStart = Vector3.Distance(startPosition, transform.position);
+        if (distanceFromStart <= maxDistanceFromStart)
         {
-            GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize - 1 * Time.deltaTime;
-            if (GetComponent<Camera>().orthographicSize < 1)
-            {
-                GetComponent<Camera>().orthographicSize = 1; // Min size 
-            }
+            Vector3 desiredPosition = player.position + offset;
+            transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothTime);
         }
-
-        if (Input.GetKey(KeyCode.E)) 
-        { 
-            GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize + 1 * Time.deltaTime;
-            if (GetComponent<Camera>().orthographicSize > 4)
-            {
-                GetComponent<Camera>().orthographicSize = 4; // Max size
-            }
+        else
+        {
+            
+            transform.position = Vector3.Lerp(transform.position, startPosition, smoothTime);
         }
-    }
-
-    void LateUpdate()
-    {
-        // Set the camera's position to the player's position plus the offset
-        transform.position = player.position + offset;
     }
 }
