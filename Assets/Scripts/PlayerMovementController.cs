@@ -9,6 +9,7 @@ public class PlayerMovementController : MonoBehaviour
 {
     [SerializeField] private Text fuelText;
     [SerializeField] private Text scoreText;
+    [SerializeField] private Text velocityText;
     [SerializeField] private Text highestScoreText;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float thrust;
@@ -34,6 +35,7 @@ public class PlayerMovementController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         fuelText.text += fuel.ToString();
         scoreText.text += totalScore.ToString();
+        velocityText.text += rb2D.velocity.ToString();
         // Get the current high score for the player
         SaveGame.LoadProgress();
         currentHighScore = SaveGame.Score;
@@ -56,6 +58,7 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         fuelText.text = "FUEL: " + ((int)fuel).ToString();
+        velocityText.text = "VELOCITY: " + rb2D.velocity.y.ToString("0.00");
     }
 
     private void FixedUpdate()
@@ -97,20 +100,26 @@ public class PlayerMovementController : MonoBehaviour
 
     public void onGroundChange(GameObject _onGround)
     {
-        // If the new score is higher than the current high score, update the high score
-        
-        totalScore += (groundScore * multiplier);
 
-        if (totalScore > currentHighScore)
+        Debug.Log("Hit the road Jack");
+        // If the new score is higher than the current high score, update the high score
+        if (rb2D.velocity.y > -0.5)
         {
-            SaveGame.Score = totalScore;
-            SaveGame.SaveProgress();
-            highestScoreText.text = totalScore.ToString();
+            totalScore += (groundScore * multiplier);
+
+            if (totalScore > currentHighScore)
+            {
+                SaveGame.Score = totalScore;
+                SaveGame.SaveProgress();
+                highestScoreText.text = totalScore.ToString();
+            }
+
+        } else
+        {
+            Debug.Log("CRASH");
         }
 
         
-
-        Debug.Log("Hit the road Jack");
 
         StartCoroutine(Freeze());
         Time.timeScale = 0;

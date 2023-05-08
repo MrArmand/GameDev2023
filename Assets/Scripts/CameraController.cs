@@ -34,7 +34,6 @@ public class CameraController : MonoBehaviour
     private void FixedUpdate()
     {
         distanceFromStart = Vector3.Distance(startPosition, player.position);
-        Debug.Log(distanceFromStart);
         if (distanceFromStart < maxDistanceFromStart)
         {
             Vector3 desiredPosition = player.position + offset;
