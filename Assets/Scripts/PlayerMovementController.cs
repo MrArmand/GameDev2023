@@ -132,7 +132,7 @@ public class PlayerMovementController : MonoBehaviour
         // If the new score is higher than the current high score, update the high score
         if (rb2D.velocity.y > -0.5)
         {
-            StartCoroutine(Freeze());
+            
             Time.timeScale = 0;
 
             totalScore += (groundScore * multiplier);
@@ -162,14 +162,15 @@ public class PlayerMovementController : MonoBehaviour
             spriteRenderer.enabled = false;
             rb2D.velocity = new Vector2(0, 0);
             Debug.Log("CRASH");
-            StartCoroutine(Freeze());
         }
 
-        
+        StartCoroutine(Freeze());
+
+
         // Freeze a game for 3 seconds 
         // If it has a fuel,it return the lander to start position
         // Otherwise it's the end of game
-        
+
     }
  
     IEnumerator Freeze()
