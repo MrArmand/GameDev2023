@@ -132,6 +132,9 @@ public class PlayerMovementController : MonoBehaviour
         // If the new score is higher than the current high score, update the high score
         if (rb2D.velocity.y > -0.5)
         {
+            StartCoroutine(Freeze());
+            Time.timeScale = 0;
+
             totalScore += (groundScore * multiplier);
 
             if (totalScore > currentHighScore)
@@ -139,6 +142,7 @@ public class PlayerMovementController : MonoBehaviour
                 SaveGame.Score = totalScore;
                 SaveGame.SaveProgress();
                 highestScoreText.text = totalScore.ToString();
+                
             }
 
         } else
@@ -158,9 +162,10 @@ public class PlayerMovementController : MonoBehaviour
             spriteRenderer.enabled = false;
             rb2D.velocity = new Vector2(0, 0);
             Debug.Log("CRASH");
+            StartCoroutine(Freeze());
         }
 
-        StartCoroutine(Freeze());
+        
         // Freeze a game for 3 seconds 
         // If it has a fuel,it return the lander to start position
         // Otherwise it's the end of game
@@ -169,11 +174,13 @@ public class PlayerMovementController : MonoBehaviour
  
     IEnumerator Freeze()
     {
+        
         scoreText.text = "SCORE: " + totalScore.ToString();
         yield return new WaitForSecondsRealtime(3f);
 
         if (fuel > 0 & gameOver == false)
         {
+            Time.timeScale = 1;
             rb2D.position = new Vector2(0, 1); // starting position
             rb2D.velocity = new Vector2(0, 0);    // reset a speed
             rb2D.rotation = 0;                    // reset a rotation
