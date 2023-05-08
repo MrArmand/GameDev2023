@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public Animator transition;
+
+    public float transitionTime = 1f;
+
     [SerializeField] GameObject pauseMenuUI;
     public static bool gameIsPaused = false;
     private PlayerMovementController player;
@@ -53,6 +57,18 @@ public class PauseMenu : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+        LoadMenu();
+    }
+
+    public void LoadMenu()
+    {
+        StartCoroutine(LoadLevel(0));
+    }
+
+    IEnumerator LoadLevel(int levelIndex)
+    {
+        transition.SetTrigger("Start");
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene(levelIndex);
     }
 }

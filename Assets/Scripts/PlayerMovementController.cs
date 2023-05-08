@@ -19,8 +19,12 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private int totalScore;
     [SerializeField] private int groundScore;
     [SerializeField] private float maxDistanceFromStart = 15f;
+    [SerializeField] GameObject GameoverUI;
+    public Transform collisionPoint;
+    float force = 100;
     public SpriteRenderer thrusterSprite;
     public LayerMask groundLayer;
+    public GameObject destroyLander;
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
     private int multiplier = 1;
@@ -29,6 +33,9 @@ public class PlayerMovementController : MonoBehaviour
     private Vector3 lastPosition;
     private Quaternion lastRotation;
     private float lastFuel;
+    private bool canFly = true;
+    private bool gameOver = false;
+    private float temporalVelocity;
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -44,10 +51,19 @@ public class PlayerMovementController : MonoBehaviour
         lastRotation = transform.rotation;
         startPosition = transform.position;
         lastFuel = fuel;
+        canFly = true;
+        gameOver = false;
     }
 
     private void Update()
     {
+        if (fuel <= 0)
+        {
+            gameOver = true;
+            GameoverUI.SetActive(true);
+            Time.timeScale = 0;
+        }
+
         if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
@@ -58,21 +74,27 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         fuelText.text = "FUEL: " + ((int)fuel).ToString();
-        velocityText.text = "VELOCITY: " + rb2D.velocity.y.ToString("0.00");
+        if(canFly)
+        {
+            velocityText.text = "VELOCITY: " + rb2D.velocity.y.ToString("0.00");
+        }
+        
     }
 
     private void FixedUpdate()
     {
         float distanceFromStart = Vector3.Distance(startPosition, transform.position);
         
-        if (distanceFromStart >= maxDistanceFromStart)
+        if (distanceFromStart >= maxDistanceFromStart & canFly == true)
         {
 
             rb2D.position = new Vector2(0, 1);
+            spriteRenderer.enabled = true;
+            canFly = true;
         }
 
         // Apply thrust
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) & canFly == true)
         {
             thrusterSprite.enabled = true;
             Vector2 thrustVector = transform.up;
@@ -86,10 +108,15 @@ public class PlayerMovementController : MonoBehaviour
     }
     public void Rewind()
     {
-        transform.position = lastPosition;
-        transform.rotation = lastRotation;
-        rb2D.velocity = Vector2.zero;
-        fuel = lastFuel;
+        if (!gameOver)
+        {
+            transform.position = lastPosition;
+            transform.rotation = lastRotation;
+            rb2D.velocity = Vector2.zero;
+            spriteRenderer.enabled = true;
+            canFly = true;
+            fuel = lastFuel;
+        }
     }
 
     public void MultiplierChange(int newMultiplier)
@@ -116,32 +143,47 @@ public class PlayerMovementController : MonoBehaviour
 
         } else
         {
+            temporalVelocity = rb2D.velocity.y;
+            canFly = false;
+            velocityText.text = "VELOCITY: " + temporalVelocity.ToString("0.00");
+            Instantiate(destroyLander, rb2D.transform.position, Quaternion.identity);
+            Rigidbody2D[] rb = destroyLander.GetComponentsInChildren<Rigidbody2D>();
+            foreach (Rigidbody2D particleRb in rb)
+            {
+                particleRb.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)); // Set a random rotation
+                Vector2 direction = particleRb.velocity.normalized;
+                particleRb.AddForce(direction * force); // Apply force based on velocity
+            }
+            
+            spriteRenderer.enabled = false;
+            rb2D.velocity = new Vector2(0, 0);
             Debug.Log("CRASH");
         }
 
-        
-
         StartCoroutine(Freeze());
-        Time.timeScale = 0;
         // Freeze a game for 3 seconds 
         // If it has a fuel,it return the lander to start position
         // Otherwise it's the end of game
         
     }
+ 
     IEnumerator Freeze()
     {
         scoreText.text = "SCORE: " + totalScore.ToString();
         yield return new WaitForSecondsRealtime(3f);
-        Time.timeScale = 1;
-        if (fuel > 0)
+
+        if (fuel > 0 & gameOver == false)
         {
             rb2D.position = new Vector2(0, 1); // starting position
             rb2D.velocity = new Vector2(0, 0);    // reset a speed
             rb2D.rotation = 0;                    // reset a rotation
+            spriteRenderer.enabled = true;
+            canFly = true;
             lastFuel = fuel;
         }
         else
         {
+
             Debug.Log("NO FUEL - END OF THE GAME");
         }
     }
