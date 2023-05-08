@@ -61,9 +61,10 @@ public class PlayerMovementController : MonoBehaviour
     private void FixedUpdate()
     {
         float distanceFromStart = Vector3.Distance(startPosition, transform.position);
-        Debug.Log(distanceFromStart);
+        
         if (distanceFromStart >= maxDistanceFromStart)
         {
+
             rb2D.position = new Vector2(0, 1);
         }
 
