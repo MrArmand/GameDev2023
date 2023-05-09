@@ -129,12 +129,13 @@ public class PlayerMovementController : MonoBehaviour
     {
 
         Debug.Log("Hit the road Jack");
-        // If the new score is higher than the current high score, update the high score
-        if (rb2D.velocity.y > -0.5)
+        
+        if (rb2D.velocity.y >= -0.5)
         {
             
             Time.timeScale = 0;
-
+            canFly = false;
+            // If the new score is higher than the current high score, update the high score
             totalScore += (groundScore * multiplier);
 
             if (totalScore > currentHighScore)
@@ -147,6 +148,7 @@ public class PlayerMovementController : MonoBehaviour
 
         } else
         {
+            Time.timeScale = 1;
             temporalVelocity = rb2D.velocity.y;
             canFly = false;
             velocityText.text = "VELOCITY: " + temporalVelocity.ToString("0.00");
@@ -177,7 +179,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         
         scoreText.text = "SCORE: " + totalScore.ToString();
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(2f);
 
         if (fuel > 0 & gameOver == false)
         {
