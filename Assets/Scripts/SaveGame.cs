@@ -9,6 +9,13 @@ public static class SaveGame
 {
     private static int score;
     private static int profileID;
+    private static int levelID;
+
+    public static int LevelID
+    {
+        get { return levelID; }
+        set { levelID = value; }  
+    }
     public static int Score
     {
         get { return score; }
@@ -24,12 +31,14 @@ public static class SaveGame
     private class SaveData
     {
         public int score;
+        public int levelID;
     }
 
     public static void SaveProgress()
     {
         SaveData saveData = new SaveData();
         saveData.score = Score;
+        saveData.levelID = LevelID;
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/save" + ProfileID + ".dat");
         Debug.Log("Saving game");
@@ -48,9 +57,11 @@ public static class SaveGame
             SaveData saveData = (SaveData)formatter.Deserialize(file);
             file.Close();
             Score = saveData.score;
+            LevelID = saveData.levelID;
         } else
         {
-           Score = 0;
+            Score = 0;
+            LevelID = 1;
         }
     }
 }
