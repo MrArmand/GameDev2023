@@ -11,13 +11,13 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     [SerializeField] private Text scoreText;
     [SerializeField] private Text velocityText;
     [SerializeField] private Text highestScoreText;
+    [SerializeField] private int totalScore;
+    [SerializeField] private int groundScore;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float thrust;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private float fuel;
     [SerializeField] private float comsumption;
-    [SerializeField] private int totalScore;
-    [SerializeField] private int groundScore;
     [SerializeField] private float maxDistanceFromStart = 15f;
     [SerializeField] GameObject GameoverUI;
 
@@ -46,8 +46,13 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     private bool canFly = true;
     private bool gameOver = false;
     
-
     float force = 100;
+
+    public static event System.Action<string> OutOfFuel;
+    private bool outoffuel = false;
+    public static event System.Action<string> OutOfBounds;
+    private bool outofbounds = false;
+
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -58,6 +63,8 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         // Get the current high score for the player
         SaveGame.LoadProgress();
         currentHighScore = SaveGame.Score;
+        outoffuel = SaveGame.Outoffuel;
+        outofbounds = SaveGame.Outofbounds;
         highestScoreText.text = currentHighScore.ToString();
         lastPosition = transform.position;
         lastRotation = transform.rotation;
@@ -77,6 +84,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             gameOver = true;
             GameoverUI.SetActive(true);
             Time.timeScale = 0;
+            addAchievement1();
         }
 
         inputHandler.LeftRotate(KeySettings.Left, left);
@@ -99,6 +107,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             rb2D.position = new Vector2(0, 1);
             spriteRenderer.enabled = true;
             canFly = true;
+            addAchievement2();
         }
 
         inputHandler.Fly(KeySettings.Up, fly);
@@ -181,6 +190,28 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         // Otherwise it's the end of game
 
     }
+
+    public void addAchievement1()
+    {
+        if (outoffuel == false)
+        {
+            OutOfFuel?.Invoke("RUN OUT OF FUEL");
+            outoffuel = true;
+            SaveGame.Outoffuel = outoffuel;
+            SaveGame.SaveProgress();
+        }
+    }
+    public void addAchievement2() 
+    { 
+
+        if (outofbounds == false)
+        {
+            OutOfBounds?.Invoke("TRY TO LEAVE MAP");
+            outofbounds = true;
+            SaveGame.Outofbounds = outofbounds;
+            SaveGame.SaveProgress();
+        }
+    }
  
     IEnumerator Freeze()
     {
@@ -200,7 +231,6 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         }
         else
         {
-
             Debug.Log("NO FUEL - END OF THE GAME");
         }
     }

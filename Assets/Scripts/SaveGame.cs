@@ -10,6 +10,20 @@ public static class SaveGame
     private static int score;
     private static int profileID;
     private static int levelID;
+    private static bool outoffuel;
+    private static bool outofbounds;
+
+    public static bool Outofbounds
+    {
+        get { return outofbounds; }
+        set { outofbounds = value; }
+    }
+
+    public static bool Outoffuel
+    {
+        get { return outoffuel; }
+        set { outoffuel = value; }
+    }
 
     public static int LevelID
     {
@@ -32,6 +46,8 @@ public static class SaveGame
     {
         public int score;
         public int levelID;
+        public bool outoffuel;
+        public bool outofbounds;
     }
 
     public static void SaveProgress()
@@ -39,6 +55,8 @@ public static class SaveGame
         SaveData saveData = new SaveData();
         saveData.score = Score;
         saveData.levelID = LevelID;
+        saveData.outoffuel = Outoffuel;
+        saveData.outofbounds = Outofbounds;
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/save" + ProfileID + ".dat");
         Debug.Log("Saving game");
@@ -58,10 +76,14 @@ public static class SaveGame
             file.Close();
             Score = saveData.score;
             LevelID = saveData.levelID;
+            Outoffuel = saveData.outoffuel;
+            Outofbounds = saveData.outofbounds;
         } else
         {
             Score = 0;
             LevelID = 1;
+            Outoffuel = false;
+            Outofbounds = false;
         }
     }
 }
