@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class MainMenu : MonoBehaviour
     public Animator transition;
     public float transitionTime = 1f;
     private int levelID = 1;
+    private string validKeys = "qwertyuiopasdfghjklzxcvbnm".ToUpper();
 
     public void Start()
     {
@@ -42,6 +44,22 @@ public class MainMenu : MonoBehaviour
     {
         mainMenuUI.SetActive(true);
         optionsMenuUI.SetActive(false);
+    }
+
+    public void FlyKey(string key)
+    {
+        key = key.ToUpper();
+
+        Debug.Log(key);
+
+        if (validKeys.Contains(key) & key != "")
+        {
+            KeyCode newKey = (KeyCode)Enum.Parse(typeof(KeyCode), key);
+            KeySettings.Up = newKey;
+            Debug.Log(newKey);
+        }
+
+        
     }
 
     public void Level()

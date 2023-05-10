@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class PlayerMovementController : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour, IEntity
 {
     [SerializeField] private Text fuelText;
     [SerializeField] private Text scoreText;
@@ -20,22 +20,34 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private int groundScore;
     [SerializeField] private float maxDistanceFromStart = 15f;
     [SerializeField] GameObject GameoverUI;
+
+    private InputHandler inputHandler = new InputHandler();
+    private LeftRotateCommand left;
+    private RightRotateCommand right;
+    private FlightCommand fly;
+
     public Transform collisionPoint;
-    float force = 100;
     public SpriteRenderer thrusterSprite;
     public LayerMask groundLayer;
     public GameObject destroyLander;
+
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
+
     private int multiplier = 1;
     private int currentHighScore;
+    private float temporalVelocity;
+    private float lastFuel;
+
     private Vector3 startPosition;
     private Vector3 lastPosition;
     private Quaternion lastRotation;
-    private float lastFuel;
+
     private bool canFly = true;
     private bool gameOver = false;
-    private float temporalVelocity;
+    
+
+    float force = 100;
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -53,6 +65,9 @@ public class PlayerMovementController : MonoBehaviour
         lastFuel = fuel;
         canFly = true;
         gameOver = false;
+        fly = new FlightCommand(this, thrust, rb2D);
+        left = new LeftRotateCommand(this, rotationSpeed);
+        right = new RightRotateCommand(this, rotationSpeed);
     }
 
     private void Update()
@@ -64,14 +79,8 @@ public class PlayerMovementController : MonoBehaviour
             Time.timeScale = 0;
         }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
-        }
+        inputHandler.LeftRotate(KeySettings.Left, left);
+        inputHandler.RightRotate(KeySettings.Right, right);
 
         fuelText.text = "FUEL: " + ((int)fuel).ToString();
         if(canFly)
@@ -87,18 +96,16 @@ public class PlayerMovementController : MonoBehaviour
         
         if (distanceFromStart >= maxDistanceFromStart & canFly == true)
         {
-
             rb2D.position = new Vector2(0, 1);
             spriteRenderer.enabled = true;
             canFly = true;
         }
 
+        inputHandler.Fly(KeySettings.Up, fly);
         // Apply thrust
-        if (Input.GetKey(KeyCode.W) & canFly == true)
+        if (inputHandler.IsFlying() & canFly == true)
         {
             thrusterSprite.enabled = true;
-            Vector2 thrustVector = transform.up;
-            rb2D.AddForce(thrust * thrustVector * Time.fixedDeltaTime);
             fuel -= (comsumption * Time.fixedDeltaTime);   
         }
         else
