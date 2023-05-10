@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Achievements : MonoBehaviour
 {
-    [SerializeField] private Text achievementText;
+    [SerializeField] private TMP_Text achievementText;
     [SerializeField] private GameObject achievementsUI;
     Queue<string> achievementQueue = new Queue<string>();
     private bool outOfFuel = false;
