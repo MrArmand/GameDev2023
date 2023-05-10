@@ -58,8 +58,34 @@ public class MainMenu : MonoBehaviour
             KeySettings.Up = newKey;
             Debug.Log(newKey);
         }
+    }
 
-        
+    public void LeftKey(string key)
+    {
+        key = key.ToUpper();
+
+        Debug.Log(key);
+
+        if (validKeys.Contains(key) & key != "")
+        {
+            KeyCode newKey = (KeyCode)Enum.Parse(typeof(KeyCode), key);
+            KeySettings.Left = newKey;
+            Debug.Log(newKey);
+        }
+    }
+
+    public void RightKey(string key)
+    {
+        key = key.ToUpper();
+
+        Debug.Log(key);
+
+        if (validKeys.Contains(key) & key != "")
+        {
+            KeyCode newKey = (KeyCode)Enum.Parse(typeof(KeyCode), key);
+            KeySettings.Right = newKey;
+            Debug.Log(newKey);
+        }
     }
 
     public void Level()

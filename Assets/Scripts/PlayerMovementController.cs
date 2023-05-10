@@ -109,8 +109,11 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             canFly = true;
             addAchievement2();
         }
-
-        inputHandler.Fly(KeySettings.Up, fly);
+        if (canFly)
+        {
+            inputHandler.Fly(KeySettings.Up, fly);
+        }
+        
         // Apply thrust
         if (inputHandler.IsFlying() & canFly == true)
         {
@@ -143,30 +146,29 @@ public class PlayerMovementController : MonoBehaviour, IEntity
 
     public void onGroundChange(GameObject _onGround)
     {
-
+        canFly = false;
         Debug.Log("Hit the road Jack");
-        
+       
+
         if (rb2D.velocity.y >= -0.5)
-        {
-            
-            Time.timeScale = 0;
-            canFly = false;
-            // If the new score is higher than the current high score, update the high score
-            totalScore += (groundScore * multiplier);
+          {
+                Time.timeScale = 0;
+                // If the new score is higher than the current high score, update the high score
+                totalScore += (groundScore * multiplier);
 
-            if (totalScore > currentHighScore)
-            {
-                SaveGame.Score = totalScore;
-                SaveGame.SaveProgress();
-                highestScoreText.text = totalScore.ToString();
-                
-            }
+                if (totalScore > currentHighScore)
+                {
+                    SaveGame.Score = totalScore;
+                    SaveGame.SaveProgress();
+                    highestScoreText.text = totalScore.ToString();
 
-        } else
+                }
+        }       
+        else
         {
             Time.timeScale = 1;
             temporalVelocity = rb2D.velocity.y;
-            canFly = false;
+        
             velocityText.text = "VELOCITY: " + temporalVelocity.ToString("0.00");
             Instantiate(destroyLander, rb2D.transform.position, Quaternion.identity);
             Rigidbody2D[] rb = destroyLander.GetComponentsInChildren<Rigidbody2D>();
@@ -176,7 +178,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
                 Vector2 direction = particleRb.velocity.normalized;
                 particleRb.AddForce(direction * force); // Apply force based on velocity
             }
-            
+
             spriteRenderer.enabled = false;
             rb2D.velocity = new Vector2(0, 0);
             Debug.Log("CRASH");
@@ -204,7 +206,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     public void addAchievement2() 
     { 
 
-        if (outofbounds == false)
+        if (outofbounds == false & canFly == true)
         {
             OutOfBounds?.Invoke("TRY TO LEAVE MAP");
             outofbounds = true;

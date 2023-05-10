@@ -60,6 +60,7 @@ public static class SaveGame
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/save" + ProfileID + ".dat");
         Debug.Log("Saving game");
+        Debug.Log(Application.persistentDataPath + "/save" + ProfileID + ".dat");
         formatter.Serialize(file, saveData);
         file.Close();
     }

@@ -11,12 +11,14 @@ public class Profiles : MonoBehaviour
 
     public void Start()
     {
-        int chosenProfile = 0;
+        int chosenProfile = PlayerPrefs.GetInt("ChosenProfile");
+        dropdown.value = chosenProfile;
         HandleInputData(chosenProfile);
     }
 
     public void HandleInputData(int chosenProfile)
     {
+        PlayerPrefs.SetInt("ChosenProfile", chosenProfile);
         Debug.Log(chosenProfile);
         SaveGame.ProfileID = chosenProfile;
         SaveGame.LoadProgress();
