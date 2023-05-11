@@ -29,6 +29,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     public Transform collisionPoint;
     public SpriteRenderer thrusterSprite;
     public LayerMask groundLayer;
+    public GameObject fuelSprite;
     public GameObject destroyLander;
 
     private Rigidbody2D rb2D;
@@ -232,6 +233,13 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             SaveGame.Points1000 = points1000;
             SaveGame.SaveProgress();
         }
+    }
+
+    public void AddFuel()
+    {
+        Debug.Log("Adding fuel...");
+        fuel += 50;
+        Destroy(fuelSprite);
     }
 
     IEnumerator Freeze()
