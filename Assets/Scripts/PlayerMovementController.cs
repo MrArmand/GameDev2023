@@ -52,6 +52,8 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     private bool outoffuel = false;
     public static event System.Action<string> OutOfBounds;
     private bool outofbounds = false;
+    public static event System.Action<string> Points1000;
+    private bool points1000 = false;
 
     private void Start()
     {
@@ -161,6 +163,10 @@ public class PlayerMovementController : MonoBehaviour, IEntity
                     SaveGame.Score = totalScore;
                     SaveGame.SaveProgress();
                     highestScoreText.text = totalScore.ToString();
+                    if (totalScore >= 1000)
+                    {
+                        addAchievement3();
+                    }
 
                 }
         }       
@@ -214,7 +220,19 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             SaveGame.SaveProgress();
         }
     }
- 
+
+    public void addAchievement3()
+    {
+
+        if (points1000 == false)
+        {
+            Points1000?.Invoke("GET AT LEAST 1000 SCORE");
+            points1000 = true;
+            SaveGame.Points1000 = points1000;
+            SaveGame.SaveProgress();
+        }
+    }
+
     IEnumerator Freeze()
     {
         

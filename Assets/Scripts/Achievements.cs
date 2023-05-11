@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class Achievements : MonoBehaviour
@@ -15,12 +16,14 @@ public class Achievements : MonoBehaviour
     {
         PlayerMovementController.OutOfFuel += PlayerMovementController_OutOfFuel;
         PlayerMovementController.OutOfBounds += PlayerMovementController_OutOfBounds;
+        PlayerMovementController.Points1000 += PlayerMovementController_Points1000;
     }
 
     private void OnDisable()
     {
         PlayerMovementController.OutOfFuel -= PlayerMovementController_OutOfFuel;
         PlayerMovementController.OutOfBounds -= PlayerMovementController_OutOfBounds;
+        PlayerMovementController.Points1000 -= PlayerMovementController_Points1000;
     }
 
     private void PlayerMovementController_OutOfFuel(string achievement)
@@ -30,6 +33,12 @@ public class Achievements : MonoBehaviour
     }
 
     private void PlayerMovementController_OutOfBounds(string achievement)
+    {
+        achievementQueue.Enqueue(achievement);
+        Debug.Log(achievement);
+    }
+
+    private void PlayerMovementController_Points1000(string achievement)
     {
         achievementQueue.Enqueue(achievement);
         Debug.Log(achievement);

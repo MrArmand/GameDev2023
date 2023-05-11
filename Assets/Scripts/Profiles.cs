@@ -8,6 +8,7 @@ public class Profiles : MonoBehaviour
 {
     public TMP_Dropdown dropdown;
     public TextMeshProUGUI output;
+    public TextMeshProUGUI achievements;
 
     public void Start()
     {
@@ -23,7 +24,24 @@ public class Profiles : MonoBehaviour
         SaveGame.ProfileID = chosenProfile;
         SaveGame.LoadProgress();
         int score = SaveGame.Score;
+        int achievementsCount = 0;
+        if (SaveGame.Outofbounds)
+        {
+            achievementsCount++;
+        }
+
+        if(SaveGame.Outoffuel)
+        {
+            achievementsCount++;
+        }
+
+        if (SaveGame.Points1000)
+        {
+            achievementsCount++;
+        }
+
         Debug.Log("Score: " + score);
+        achievements.text = "Achievements: " + achievementsCount.ToString() + "/3";
         output.text = score.ToString();
     }
 }
