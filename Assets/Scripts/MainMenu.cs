@@ -12,8 +12,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject mainMenuUI;
     [SerializeField] GameObject optionsMenuUI;
     [SerializeField] private TMP_Text levelText;
+
     public Animator transition;
     public float transitionTime = 1f;
+
     private int levelID = 1;
     private string validKeys = "qwertyuiopasdfghjklzxcvbnm".ToUpper();
 
@@ -30,7 +32,8 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        StartCoroutine(LoadLevel());
+        StartCoroutine(LoadLevel(levelID));
+        
     }
 
     public void Settings()
@@ -108,7 +111,8 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
-    IEnumerator LoadLevel()
+
+    IEnumerator LoadLevel(int levelID)
     {
         transition.SetTrigger("Start");
         yield return new WaitForSeconds(transitionTime);

@@ -85,7 +85,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 14648577716419120}
-  - component: {fileID: 2937261677677848865}
+  - component: {fileID: 8208266110132595228}
   m_Layer: 0
   m_Name: LevelLoader
   m_TagString: Untagged
@@ -109,7 +109,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2937261677677848865
+--- !u!114 &8208266110132595228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,12 +118,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 14648577716419087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f831d1191086c941a8b9f0bde037e8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 463d297956068cc4184c799ef8fe0d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   transition: {fileID: 14648578094151310}
   transitionTime: 1
-  pauseMenuUI: {fileID: 0}
 --- !u!1 &14648577816887529
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +184,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &14648577816887532
 MonoBehaviour:
@@ -236,8 +235,8 @@ CanvasGroup:
   m_GameObject: {fileID: 14648577816887529}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!95 &14648578094151310
 Animator:

@@ -108,7 +108,6 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         {
             rb2D.position = new Vector2(0, 1);
             spriteRenderer.enabled = true;
-            canFly = true;
             addAchievement2();
         }
         if (canFly)

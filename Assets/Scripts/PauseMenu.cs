@@ -10,6 +10,9 @@ public class PauseMenu : MonoBehaviour
     public static bool gameIsPaused = false;
     private PlayerMovementController player;
 
+    public Animator transition;
+    public float transitionTime = 1f;
+
     private void Start()
     {
         player = FindObjectOfType<PlayerMovementController>();
@@ -54,11 +57,13 @@ public class PauseMenu : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1f;
-        LoadMenu();
+        StartCoroutine(LoadMenu());
     }
 
-    public void LoadMenu()
+    IEnumerator LoadMenu()
     {
+        transition.SetTrigger("Start");
+        yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene(0);
     }
 
