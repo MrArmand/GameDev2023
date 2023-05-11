@@ -54,6 +54,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     private bool outofbounds = false;
     public static event System.Action<string> Points1000;
     private bool points1000 = false;
+    private bool noFuel = false;
 
     private void Start()
     {
@@ -74,6 +75,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         lastFuel = fuel;
         canFly = true;
         gameOver = false;
+        noFuel = false;
         fly = new FlightCommand(this, thrust, rb2D);
         left = new LeftRotateCommand(this, rotationSpeed);
         right = new RightRotateCommand(this, rotationSpeed);
@@ -83,9 +85,9 @@ public class PlayerMovementController : MonoBehaviour, IEntity
     {
         if (fuel <= 0)
         {
+            noFuel = true;
             gameOver = true;
             GameoverUI.SetActive(true);
-            Time.timeScale = 0;
             addAchievement1();
         }
 
@@ -110,7 +112,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
             spriteRenderer.enabled = true;
             addAchievement2();
         }
-        if (canFly)
+        if (canFly & noFuel == false)
         {
             inputHandler.Fly(KeySettings.Up, fly);
         }
