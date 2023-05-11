@@ -69,6 +69,7 @@ public class PlayerMovementController : MonoBehaviour, IEntity
         currentHighScore = SaveGame.Score;
         outoffuel = SaveGame.Outoffuel;
         outofbounds = SaveGame.Outofbounds;
+        points1000 = SaveGame.Points1000;
         highestScoreText.text = currentHighScore.ToString();
         lastPosition = transform.position;
         lastRotation = transform.rotation;

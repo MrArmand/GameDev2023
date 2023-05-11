@@ -10,7 +10,7 @@ public class Achievements : MonoBehaviour
     [SerializeField] private TMP_Text achievementText;
     [SerializeField] private GameObject achievementsUI;
     Queue<string> achievementQueue = new Queue<string>();
-    private bool outOfFuel = false;
+    private bool processQueue = false;
 
     private void OnEnable()
     {
@@ -50,14 +50,13 @@ public class Achievements : MonoBehaviour
         while (achievementQueue.Count > 0)
         {
             achievementsUI.SetActive(true);
-            outOfFuel = true;
+            processQueue = true;
             string achievement = achievementQueue.Dequeue();
             Debug.Log(achievement);
             achievementText.text = achievement;
-            // Add your achievement processing logic here
 
             yield return new WaitForSecondsRealtime(5f); // Wait for 5 seconds before processing the next achievement
-            outOfFuel = false;
+            processQueue = false;
             achievementsUI.SetActive(false);
         }
     }
@@ -94,7 +93,7 @@ public class Achievements : MonoBehaviour
         }
 
 
-        if (outOfFuel == false)
+        if (processQueue == false)
         {
             StartCoroutine(ProcessAchievements());
         }
